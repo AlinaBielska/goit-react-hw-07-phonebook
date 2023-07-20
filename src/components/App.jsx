@@ -1,9 +1,20 @@
+import { useDispatch, useSelector } from "react-redux";
+
+
 import ContactForm from "./ContactForm/ContactForm";
 import Filter from './Filter/Filter';
 import ContactList from "./ContactList/ContactList";
 import css from './App.module.css';
+import { useEffect } from "react";
 
 export const App = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectLoading);
+  const error = useSelector(selectError);
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <div className={css.body}>
       <h1 className={css.title}>Phonebook</h1>
@@ -13,6 +24,7 @@ export const App = () => {
           <h2 className={css.contactsTitle} >Contacts</h2>
           <Filter />
           <ContactList />
+          {isLoading && !error && <p>Loading...</p>}
         </div>
       </div>
     </div>
