@@ -1,23 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
-import { getContacts } from 'redux/selectors';
+import { addContact } from '../../redux/operations';
+import { selectContacts } from '../../redux/selectors';
 import PropTypes from 'prop-types';
 import css from './ContactForm.module.css';
 
 const ContactForm = () => {
 
-    const contacts = useSelector(getContacts);
+    const contacts = useSelector(selectContacts);
     const dispatch = useDispatch();
 
     const onSubmitCheckAndAdd = e => {
         e.preventDefault();
         const form = e.currentTarget;
-        const formName = form.elements.name.value;
-        const formNumber = form.elements.number.value;
+        const name = form.elements.name.value;
+        const phone = form.elements.number.value;
+        const newContact = {
+            name,
+            phone,
+        };
 
-        contacts.find(contact => contact.name.toLowerCase() === formName.toLowerCase())
-            ? window.alert(`${formName} is already in contacts`)
-            : dispatch(addContact(formName, formNumber));
+        contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase())
+            ? window.alert(`${name} is already in contacts`)
+            : dispatch(addContact(newContact));
         
         form.reset();
     };
@@ -50,8 +54,8 @@ const ContactForm = () => {
 ContactForm.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
+        formName: PropTypes.string.isRequired,
+        formNumber: PropTypes.string.isRequired,
     }))
 };
 
